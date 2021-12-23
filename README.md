@@ -4,7 +4,7 @@ The purpose of the App is to assist users in picking a Secure Password.
 
 This Password Generator starts as a button on the page that says, "GENERATE PASSWORD"
 
-The App asks for the length of the password. Any number below 8 and above 128 is rejected and the App asks the user to insert a new length.
+Once clicked, the App asks for the length of the password. Any number below 8 and above 128 is rejected. The App asks the user to insert a new password length.
 
 Next, the App will ask if the user wants to use lower case letters, then upper case letters, then numbers, then special characters.
     -Every Letter of the Alphabet will be in 2 Arrays. One for Upper Case and another for Lower Case.
