@@ -11,7 +11,7 @@ Next, the App will ask if the user wants to use lower case letters, then upper c
     -An Array for numbers will have 0 - 9.
     -An Array for Special Characters are based this list from: https://www.owasp.org/index.php/Password_special_characters
 
-The App will determine if there is at least one character is selected
+The App will determine if there is at least one type selected
 
 When all the criteria is met, the password is generated.
 
