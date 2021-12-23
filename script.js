@@ -2,93 +2,146 @@
 // https://stackoverflow.com/questions/28970925/basic-javascript-password-generator
 // https://w3collective.com/random-password-generator-javascript/
 // https://www.tutorialstonight.com/password-generator-in-javascript.php
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/isNaN
 
 var lower = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var upper = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 var num = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var special = [" ", "!", "'", "#", "$", "%", "&", "(", ")", "*", "+", ",", "-", ".", "/", "\"", "@", ":", ";", "<", ">", "?", "[", "]", "=", "^", "~", "`", "{", "}", "|"];
-var chars = [];
-var length = 0;
 
 
+//Get password options from the user
+function Options() {
+  var length = prompt("How long would you like your password to be?"); 
 
-// Function that Generate's a password
-function generatePassword(settings) {
-  var result = "";
 
-  var random = 0;
+  //Makes sure password length is a number
+  if (isNaN(length) === true) {
+    alert('Length of your password must be between 8 and 128');
+    return;
+  }
+
+  //Checks if password length is at least 8
+  if (length < 8) {
+    alert('Enter at least 8 as a password length');
+    return;
+  }
+
+  //Checks if password length no more than 128
+  if (length > 128) {
+    alert('Enter no more than 128 for password length');
+    return;
+  }
+
+  //Checks to confirm if lower case will be used.
+  var isLower = confirm(
+    'Click OK to include lower case characters.'
+  );
   
-  if (settings) {
-    chars = [];
-    promptPassword();
+  //Checks to confirm if upper case will be used.
+  var isUpper = confirm(
+    'Click OK to include upper case characters.'
+  );
+
+  //Checks to confirm if number will be used.
+  var isNums = confirm(
+    'Click OK to include numbers'
+  );
+
+  //Checks to confirm if special characters will be used.
+  var isSpecial = confirm(
+    'Click OK to include special characters.'
+  );
+
+  //Checks to see if the user chose types of characters.
+  if (
+    isLower === false &&
+    isUpper === false &&
+    isNums === false &&
+    isSpecial === false 
+  ) {
+    alert('Select at least one character type');
+    return;
   }
 
-  for (var i = 0; i < length; i++) {
-    random = Math.floor(Math.random() * chars.length);
-    result = result.concat(chars[random]);
-  }
-  return result;
+  // Object to store user input
+  var passwordOptions = {
+    length: length,
+    isLower: isLower,
+    isUpper: isUpper,
+    isNums: isNums,
+    isSpecial: isSpecial
+  };
+
+  return passwordOptions;
 }
 
-// Function to ask the User for Password input
-function promptPassword() {
-  var isValid = false;
+//Function that gets a random index
+function getRandomIndex(ind) {
+  var randomIndex = Math.floor(Math.random() * ind.length);
+  var randomElement = ind[randomIndex];
 
-  while (!isValid) {
-    length = prompt("Select a password length between 8 to 128 characters:");
-    if (length === null) {
-      return;
-    }
-    if (length >= 8 && length <= 128) {
-      length = Math.floor(length);
-      isValid = true;
-    }
-    else {
-      alert("Invalid input, try again!");
-    }
-  }
-
-  var types = [false, false, false, false];
-
-  types[0] = confirm("Include Lower Case letters?"); 
-  types[1] = confirm("Include Upper Case letters?");
-  types[2] = confirm("Include Numbers?");
-  types[3] = confirm("Include Special characters?");
-  
-  if (!(types[0] || types[1] || types[2] || types[3])) {
-    alert("No other options were selected. Password will have Lower Case characters.");
-    chars = chars.concat(lower);
-  }
-  else {
-    if (types[0]) {
-      chars = chars.concat(lower);
-    }
-    if (types[1]) {
-      chars = chars.concat(upper);
-    }
-    if (types[2]) {
-      chars = chars.concat(num);
-    }
-    if (types[3]) {
-      chars = chars.concat(special);
-    }
-  }
+  return randomElement;
 }
 
+//Function that generates the password
+function generatePassword() {
+  var options = Options();
+ 
+  var result = [];
 
-// Assignment Code
+  var passwordChar = [];
+
+  var userChar = [];
+
+  //Creates an array of special characters into the User Character array
+  if (options.isSpecial) { 
+    passwordChar = passwordChar.concat(special);
+    userChar.push(getRandomIndex(special));
+  }
+
+  //Creates an array of numbers into the User Character array
+  if (options.isNums) {
+    passwordChar = passwordChar.concat(num);
+    userChar.push(getRandomIndex(num));
+  }
+
+  //Creates an array of lower case characters into the User Character array
+  if (options.isLower) {
+    passwordChar = passwordChar.concat(lower);
+    userChar.push(getRandomIndex(lower));
+  }
+
+  //Creates an array of upper case characters into the User Character array
+  if (options.isUpper) {
+    passwordChar = passwordChar.concat(upper);
+    userChar.push(getRandomIndex(upper));
+  }
+
+  //For loops through password length from Options at random. Conc's those characters into 'result'
+  for (var i = 0; i < options.length; i++) {
+    var passwordChar = getRandomIndex(passwordChar);
+
+    result.push(passwordChar);
+  }
+
+  //Puts one of each character into the generated password from user input
+  for (var i = 0; i < userChar.length; i++) {
+    result[i] = userChar[i];
+  }
+
+  //Creates a new string to be used in writePassword()
+  return result.join('');
+}
+
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
-  var settings = true;
-  if (length !== 0) {
-    settings = confirm("Do you want to chage the Password Generator's Settings?");
-  }
-  var password = generatePassword(settings);
+  var password = generatePassword();
   var passwordText = document.querySelector("#password");
-  passwordText.value = password;
 
+  passwordText.value = password;
 }
 
 // Add event listener to generate button
