@@ -94,18 +94,6 @@ function generatePassword() {
 
   var userChar = [];
 
-  //Creates an array of special characters into the User Character array
-  if (options.isSpecial) { 
-    passwordChar = passwordChar.concat(special);
-    userChar.push(getRandomIndex(special));
-  }
-
-  //Creates an array of numbers into the User Character array
-  if (options.isNums) {
-    passwordChar = passwordChar.concat(num);
-    userChar.push(getRandomIndex(num));
-  }
-
   //Creates an array of lower case characters into the User Character array
   if (options.isLower) {
     passwordChar = passwordChar.concat(lower);
@@ -117,6 +105,18 @@ function generatePassword() {
     passwordChar = passwordChar.concat(upper);
     userChar.push(getRandomIndex(upper));
   }
+
+    //Creates an array of numbers into the User Character array
+    if (options.isNums) {
+      passwordChar = passwordChar.concat(num);
+      userChar.push(getRandomIndex(num));
+    }
+
+    //Creates an array of special characters into the User Character array
+    if (options.isSpecial) { 
+      passwordChar = passwordChar.concat(special);
+      userChar.push(getRandomIndex(special));
+    }
 
   //For loops through password length from Options at random. Conc's those characters into 'result'
   for (var i = 0; i < options.length; i++) {
